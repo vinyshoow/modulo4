@@ -4,12 +4,12 @@
   <form class="card" method="POST" action="/instructors">
     <section 
       class="avatar" 
-      style="background:url(https://source.unsplash.com/collection/8353395/500x500) no-repeat center / cover">
+      style="background:url({{instructor.avatar_url}}) no-repeat center / cover">
 
     </section>
 
     <section class="details">
-      <h3>Novo Instrutor</h3>
+      <h3>Editar Instrutor</h3>
 
       {% include 'instructors/fields.njk' %}
       

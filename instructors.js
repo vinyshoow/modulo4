@@ -1,5 +1,29 @@
 const fs = require('fs');
+const Intl = require('intl');
 const data = require('./data.json');
+const { age, date } = require('./utils');
+
+//mostrar dados 
+exports.show = function(req,res) {
+  const { id } = req.params;
+
+  const foundInstructor = data.instructors.find(function(instructor) {
+    return instructor.id == id;
+  })
+
+  if(!foundInstructor) {
+    return res.send("Instructor not found");
+  }  
+
+  const instructor = {
+    ...foundInstructor,
+    age: age(foundInstructor.birth),
+    services: foundInstructor.services.split(","),
+    created_at: new Intl.DateTimeFormat("pt-BR").format(foundInstructor.created_at),
+  }
+  res.render("instructors/show", { instructor });
+}
+
 //post (cadastro do usuário)
 exports.post = function(req, res) {
   let {avatar_url, name, birth, gender, services} = req.body;
@@ -35,4 +59,23 @@ exports.post = function(req, res) {
   })
 
   /* return res.send(req.body); */
+}
+
+//editar cadastro do usuário
+exports.edit = function(req, res) {
+  const { id } = req.params;
+
+  const foundInstructor = data.instructors.find(function(instructor) {
+    return instructor.id == id;
+  })
+
+  if(!foundInstructor) {
+    return res.send("Instructor not found");
+  }
+  const instructor = {
+    ...foundInstructor,
+    birth: date(foundInstructor.birth)
+  }
+
+  res.render("instructors/edit", { instructor });
 }
